@@ -56,17 +56,45 @@ ELSE ()
 ENDIF () 
 
 set(INCLUDE_DIRS "test/inc" "lib/inc")
-
 include_directories(${INCLUDE_DIRS})
 
 
+SET(LIBRDKAFKA_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
+link_directories(${LIBRDKAFKA_LIBRARY_DIR})
+
+SET(LIBRDKAFKA_LIB_NAME "librdkafka++.so")
+
 #------------------------------------------------------------------------------
-# add the executable 001
+# add the executable producer
 #------------------------------------------------------------------------------
-add_executable(ex618_kafka_001_ex
+SET(PRODUCER_EXEC_NAME "kafka_exec_producer")
+add_executable(${PRODUCER_EXEC_NAME}
 
 	main/main_01.cpp
+
 )
 
+IF (MSVC)
+#
+ELSE ()
+	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
+ENDIF ()
+
+
+#------------------------------------------------------------------------------
+# add the executable consumer
+#------------------------------------------------------------------------------
+SET(CONSUMER_EXEC_NAME "kafka_exec_consumer")
+add_executable(${CONSUMER_EXEC_NAME}
+
+	main/main_02.cpp
+
+)
+
+IF (MSVC)
+#
+ELSE ()
+	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
+ENDIF ()
 
 
