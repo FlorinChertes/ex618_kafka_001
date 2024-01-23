@@ -58,11 +58,17 @@ ENDIF ()
 set(INCLUDE_DIRS "test/inc" "lib/inc")
 include_directories(${INCLUDE_DIRS})
 
+IF (MSVC)
+	SET(LIBRDKAFKA_LIBRARY_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
+	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
 
-SET(LIBRDKAFKA_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
-link_directories(${LIBRDKAFKA_LIBRARY_DIR})
+	SET(LIBRDKAFKA_LIB_NAME "rdkafka++.lib")
+ELSE ()
+	SET(LIBRDKAFKA_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
+	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
 
-SET(LIBRDKAFKA_LIB_NAME "librdkafka++.so")
+	SET(LIBRDKAFKA_LIB_NAME "librdkafka++.so")
+ENDIF ()
 
 #------------------------------------------------------------------------------
 # add the executable producer
@@ -71,11 +77,10 @@ SET(PRODUCER_EXEC_NAME "kafka_exec_producer")
 add_executable(${PRODUCER_EXEC_NAME}
 
 	main/main_01.cpp
-
 )
 
 IF (MSVC)
-#
+	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 ELSE ()
 	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 ENDIF ()
@@ -88,11 +93,10 @@ SET(CONSUMER_EXEC_NAME "kafka_exec_consumer")
 add_executable(${CONSUMER_EXEC_NAME}
 
 	main/main_02.cpp
-
 )
 
 IF (MSVC)
-#
+	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 ELSE ()
 	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 ENDIF ()
