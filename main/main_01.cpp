@@ -15,7 +15,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     std::string topicName = "amazingTopic";
 
     RdKafka::Conf *conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
-    conf->set("metadata.broker.list", brokers, errstr);
+    conf->set("bootstrap-server", brokers, errstr);
 
     RdKafka::Producer *producer = RdKafka::Producer::create(conf, errstr);
     delete conf;

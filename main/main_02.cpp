@@ -16,7 +16,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     // Create a configuration object
     RdKafka::Conf *conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
     conf->set("group.id", groupId, errstr);
-    conf->set("metadata.broker.list", brokers, errstr);
+    conf->set("bootstrap-server", brokers, errstr);
     conf->set("enable.auto.commit", "true", errstr);
 
     // Create a consumer using the configuration
