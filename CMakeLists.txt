@@ -6,30 +6,36 @@ project (ex618_kafka_001_prj  LANGUAGES CXX)
 
 
 IF (MSVC)
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+	message(STATUS " tool set version '${MSVC_TOOLSET_VERSION}'")
+	IF(MSVC_TOOLSET_VERSION EQUAL 142)
+		set(CMAKE_CXX_STANDARD 20)
+	ELSE()
+		set(CMAKE_CXX_STANDARD 23)
+	ENDIF()
+
+	set(CMAKE_CXX_EXTENSIONS OFF)
+	set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ELSE()
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+	set(CMAKE_CXX_STANDARD 23)
+	set(CMAKE_CXX_EXTENSIONS OFF)
+	set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ENDIF()
 
-include(FetchContent)
+# include(FetchContent)
 
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        release-1.11.0
-        GIT_SHALLOW    1
-)
-FetchContent_MakeAvailable(googletest)
-include(GoogleTest)
+# FetchContent_Declare(
+        # googletest
+        # GIT_REPOSITORY https://github.com/google/googletest.git
+        # GIT_TAG        release-1.11.0
+        # GIT_SHALLOW    1
+# )
+# FetchContent_MakeAvailable(googletest)
+# include(GoogleTest)
 
 
 IF (MSVC)
 	# Avoid error LNK2038
-	set(gtest_force_shared_crt on)
+	#set(gtest_force_shared_crt on)
 
 	# Activate C++ exception handling 
 	IF (NOT CMAKE_CXX_FLAGS MATCHES "/EHsc") 
@@ -56,19 +62,27 @@ ELSE ()
 ENDIF () 
 
 set(INCLUDE_DIRS "test/inc" "lib/inc")
-include_directories(${INCLUDE_DIRS})
 
 IF (MSVC)
-	SET(LIBRDKAFKA_LIBRARY_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
-	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
+message(STATUS " tool set version '${MSVC_TOOLSET_VERSION}'")
+	IF(MSVC_TOOLSET_VERSION EQUAL 142)
+		SET(INCLUDE_DIRS "V:/3rdparty")
+		SET(LIBRDKAFKA_LIBRARY_DIR "V:/3rdparty/librdkafka_2.2.0/lib")
+		SET(LIBRDKAFKA_LIB_NAME "librdkafkacpp.lib")
+	ELSE()
+		SET(LIBRDKAFKA_LIBRARY_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
+		SET(LIBRDKAFKA_LIB_NAME "rdkafka++.lib")
+	ENDIF()
 
-	SET(LIBRDKAFKA_LIB_NAME "rdkafka++.lib")
+	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
 ELSE ()
 	SET(LIBRDKAFKA_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
 	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
 
 	SET(LIBRDKAFKA_LIB_NAME "librdkafka++.so")
 ENDIF ()
+
+include_directories(${INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
 # add the executable producer
@@ -78,12 +92,7 @@ add_executable(${PRODUCER_EXEC_NAME}
 
 	main/main_01.cpp
 )
-
-IF (MSVC)
-	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
-ELSE ()
-	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
-ENDIF ()
+target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 
 
 #------------------------------------------------------------------------------
@@ -94,11 +103,6 @@ add_executable(${CONSUMER_EXEC_NAME}
 
 	main/main_02.cpp
 )
-
-IF (MSVC)
-	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
-ELSE ()
-	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
-ENDIF ()
+target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 
 
