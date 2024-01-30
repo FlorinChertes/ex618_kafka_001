@@ -2,20 +2,26 @@
 #include <librdkafka_2.2.0/include/rdkafkacpp.h>
 #elif _MSC_VER >= 1930
 #include <librdkafka/rdkafkacpp.h>
+#include <librdkafka/rdkafka.h>
 #endif
 
 #include <iostream>
 #include <string>
+#include <cassert>
 
+#pragma comment(lib, "Ws2_32.lib")
 
 int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
 	std::cout << "kafka producer" << std::endl;
 
+    const char* version = rd_kafka_version_str();
+    std::cout << "librdkafka version: " << version << std::endl;
+
 	std::string errstr;
 
 	std::string brokers = "localhost:9092";
-    std::string topicName = "amazingTopic";
+    const std::string topicName = "amazingTopic";
 
 	std::cout << "input brocker address: " << std::endl;
     std::string brocker_address{};
@@ -28,9 +34,25 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     std::cout << "input brocker address: >" << brokers << "<" << std::endl;
 
     RdKafka::Conf *conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
+    assert(conf != nullptr);
     std::cout << "configuration created" << std::endl;
-    conf->set("metadata.broker.list", brokers, errstr);
+
+    if (RdKafka::Conf::ConfResult conf_result = conf->set("bootstrap.servers", brokers, errstr);
+        conf_result != RdKafka::Conf::ConfResult::CONF_OK)
+    {
+        if (conf_result == RdKafka::Conf::ConfResult::CONF_INVALID)
+        {
+            std::cout << "At set conf with name = metadata.broker.list error type: conf invalid " << std::endl;
+        }
+        else
+        {
+            std::cout << "At set conf with name = metadata.broker.list error type: conf unknown " << std::endl;
+        }
+        std::cout << "At set conf with name = metadata.broker.list error : " << errstr << std::endl;
+    }
+
     std::cout << "brocker name set in conf" << std::endl;
+
 
     RdKafka::Producer *producer = RdKafka::Producer::create(conf, errstr);
     delete conf;
@@ -47,7 +69,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
                           const_cast<char *>(line.c_str()), line.size(),
                           nullptr, nullptr);
     }
-   std::cout << "sendind loop exited" << std::endl;
+    std::cout << "sendind loop exited" << std::endl;
 
     producer->flush(10*1000 /* wait for max 10 seconds */);
 
