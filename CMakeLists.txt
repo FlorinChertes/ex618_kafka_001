@@ -115,3 +115,12 @@ add_executable(${PRODUCER_NAME}
 )
 target_link_libraries(${PRODUCER_NAME} ${LIBRDKAFKA_LIB_NAME})
 
+#------------------------------------------------------------------------------
+# add the librdkafka api consumer
+#------------------------------------------------------------------------------
+SET(CONSUMER_NAME "kafka_consumer")
+add_executable(${CONSUMER_NAME}
+
+	main/main_02_01.cpp
+)
+target_link_libraries(${CONSUMER_NAME} ${LIBRDKAFKA_LIB_NAME})
