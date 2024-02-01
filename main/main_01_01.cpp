@@ -1,4 +1,8 @@
+#ifdef _MSC_VER
 #include <rdkafka.h>
+#elif __GNUC__
+#include <librdkafka/rdkafka.h>
+#endif
 
 #include <vector>
 #include <string>
@@ -80,7 +84,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
             ret_val == -1)
         {
             fprintf(stderr, "%% Failed to produce to topic %s: %s\n",
-                topicName.c_str(), rd_kafka_err2str(rd_kafka_errno2err(errno)));
+                topicName.c_str(), rd_kafka_err2str(rd_kafka_last_error()));
         }
     }
     std::cout << "sendind loop exited" << std::endl;

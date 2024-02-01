@@ -1,4 +1,9 @@
+#ifdef _MSC_VER
 #include <rdkafka.h>
+#elif __GNUC__
+#include <librdkafka/rdkafka.h>
+#endif
+
 
 #include <vector>
 #include <string>
@@ -118,9 +123,13 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
     if (rd_kafka_resp_err_t err = rd_kafka_consumer_close(rk);
         err != RD_KAFKA_RESP_ERR_NO_ERROR)
+    {
         fprintf(stderr, "%% Failed to close consumer: %s\n", rd_kafka_err2str(err));
+    }
     else
+    {
         fprintf(stderr, "%% Consumer closed\n");
+    }
 
 	return 0;
 }

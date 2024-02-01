@@ -1,4 +1,5 @@
 #include <librdkafka/rdkafkacpp.h>
+#include <librdkafka/rdkafka.h>
 
 #include <string>
 #include <iostream>
@@ -7,6 +8,8 @@
 int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
 	std::cout << "kafka producer" << std::endl;
+
+    [[maybe_unused]] rd_kafka_conf_t *conf_dummy = rd_kafka_conf_new();
 
     const char* version = rd_kafka_version_str();
     std::cout << "librdkafka version: " << version << std::endl;
@@ -68,6 +71,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
     delete topic;
     delete producer;
+
 
 	return 0;
 }
