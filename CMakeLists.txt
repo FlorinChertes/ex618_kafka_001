@@ -107,7 +107,7 @@ IF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU
 	)
 	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 
-ELSEIF()
+ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	#using MSVC
 
 	#------------------------------------------------------------------------------
