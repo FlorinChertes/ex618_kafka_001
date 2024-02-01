@@ -1,13 +1,8 @@
-#if _MSC_VER >= 1920 && _MSC_VER < 1930
-#include <librdkafka_2.2.0/include/rdkafkacpp.h>
-#elif _MSC_VER >= 1930
 #include <librdkafka/rdkafkacpp.h>
-#endif
 
-
-#include <iostream>
 #include <string>
-
+#include <iostream>
+#include <cassert>
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
  {

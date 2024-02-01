@@ -66,61 +66,70 @@ set(INCLUDE_DIRS "test/inc" "lib/inc")
 IF (MSVC)
 	message(STATUS " MSVC version '${MSVC_VERSION}'")
 	IF(MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930)
-		SET(INCLUDE_DIRS "V:/3rdparty")
-		SET(LIBRDKAFKA_LIBRARY_DIR "V:/3rdparty/librdkafka_2.2.0/lib")
-		SET(LIBRDKAFKA_LIB_NAME "librdkafkacpp.lib")
+		SET(INCLUDE_DIRS "V:/3rdparty/librdkafka_2.2.0/include")
+		SET(LIBRDKAFKA_LIB_DIR "V:/3rdparty/librdkafka_2.2.0/lib")
+		SET(LIBRDKAFKA_LIB_NAME "librdkafka.lib")
 	ELSEIF(MSVC_VERSION GREATER_EQUAL 1930)
-		SET(LIBRDKAFKA_LIBRARY_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
+		SET(INCLUDE_DIRS "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows//include/librdkafka")
+		SET(LIBRDKAFKA_LIB_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
 		SET(LIBRDKAFKA_LIB_NAME "rdkafka++.lib")
 	ENDIF()
-
-	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
 ELSE ()
-	SET(LIBRDKAFKA_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
-	link_directories(${LIBRDKAFKA_LIBRARY_DIR})
-
+	SET(LIBRDKAFKA_LIB_DIR "/usr/lib/x86_64-linux-gnu")
 	SET(LIBRDKAFKA_LIB_NAME "librdkafka++.so")
 ENDIF ()
 
 include_directories(${INCLUDE_DIRS})
-
-#------------------------------------------------------------------------------
-# add the executable producer
-#------------------------------------------------------------------------------
-SET(PRODUCER_EXEC_NAME "kafka_exec_producer")
-add_executable(${PRODUCER_EXEC_NAME}
-
-	main/main_01.cpp
-)
-target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
+link_directories(${LIBRDKAFKA_LIB_DIR})
 
 
-#------------------------------------------------------------------------------
-# add the executable consumer
-#------------------------------------------------------------------------------
-SET(CONSUMER_EXEC_NAME "kafka_exec_consumer")
-add_executable(${CONSUMER_EXEC_NAME}
+IF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	#usinf Clang or GNU
 
-	main/main_02.cpp
-)
-target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
+	#------------------------------------------------------------------------------
+	# add the executable producer
+	#------------------------------------------------------------------------------
+	SET(PRODUCER_EXEC_NAME "kafka_exec_producer")
+	add_executable(${PRODUCER_EXEC_NAME}
 
-#------------------------------------------------------------------------------
-# add the librdkafka api producer
-#------------------------------------------------------------------------------
-SET(PRODUCER_NAME "kafka_producer")
-add_executable(${PRODUCER_NAME}
+		main/main_01.cpp
+	)
+	target_link_libraries(${PRODUCER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
 
-	main/main_01_01.cpp
-)
-target_link_libraries(${PRODUCER_NAME} ${LIBRDKAFKA_LIB_NAME})
 
-#------------------------------------------------------------------------------
-# add the librdkafka api consumer
-#------------------------------------------------------------------------------
-SET(CONSUMER_NAME "kafka_consumer")
-add_executable(${CONSUMER_NAME}
+	#------------------------------------------------------------------------------
+	# add the executable consumer
+	#------------------------------------------------------------------------------
+	SET(CONSUMER_EXEC_NAME "kafka_exec_consumer")
+	add_executable(${CONSUMER_EXEC_NAME}
 
-	main/main_02_01.cpp
-)
-target_link_libraries(${CONSUMER_NAME} ${LIBRDKAFKA_LIB_NAME})
+		main/main_02.cpp
+	)
+	target_link_libraries(${CONSUMER_EXEC_NAME} ${LIBRDKAFKA_LIB_NAME})
+
+ELSEIF()
+	#using MSVC
+
+	#------------------------------------------------------------------------------
+	# add the librdkafka api producer
+	#------------------------------------------------------------------------------
+	SET(PRODUCER_NAME "kafka_producer")
+	add_executable(${PRODUCER_NAME}
+
+		main/main_01_01.cpp
+	)
+	target_link_libraries(${PRODUCER_NAME} ${LIBRDKAFKA_LIB_NAME})
+
+	#------------------------------------------------------------------------------
+	# add the librdkafka api consumer
+	#------------------------------------------------------------------------------
+	SET(CONSUMER_NAME "kafka_consumer")
+	add_executable(${CONSUMER_NAME}
+
+		main/main_02_01.cpp
+	)
+	target_link_libraries(${CONSUMER_NAME} ${LIBRDKAFKA_LIB_NAME})
+
+ENDIF()
+
+
