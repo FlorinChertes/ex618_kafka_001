@@ -1,3 +1,5 @@
+#include <rdkafka.h>
+
 #include <vector>
 #include <string>
 
