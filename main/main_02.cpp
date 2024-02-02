@@ -1,4 +1,8 @@
+#ifdef _MSC_VER
+#include <rdkafkacpp.h>
+#elif __GNUC__
 #include <librdkafka/rdkafkacpp.h>
+#endif
 
 #include <string>
 #include <iostream>
