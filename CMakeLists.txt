@@ -50,19 +50,21 @@ ENDIF ()
 set(INCLUDE_DIRS "test/inc" "lib/inc")
 
 IF (MSVC)
-	message(STATUS " MSVC version '${MSVC_VERSION}'")
 	IF(MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930)
 		SET(INCLUDE_DIRS "V:/3rdparty/librdkafka_2.2.0/include")
 		SET(LIBRDKAFKA_LIB_DIR "V:/3rdparty/librdkafka_2.2.0/lib")
 		SET(LIBRDKAFKA_LIB_NAME "librdkafka.lib")
+		SET(LIBRDKAFKA_CPP_LIB_NAME "librdkafkacpp.lib")
 	ELSEIF(MSVC_VERSION GREATER_EQUAL 1930)
 		SET(INCLUDE_DIRS "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows//include/librdkafka")
 		SET(LIBRDKAFKA_LIB_DIR "E:/users/chfl/app/vcpkg/packages/librdkafka_x64-windows/lib")
 		SET(LIBRDKAFKA_LIB_NAME "rdkafka.lib")
+		SET(LIBRDKAFKA_CPP_LIB_NAME "rdkafka++.lib")
 	ENDIF()
 ELSE ()
 	SET(LIBRDKAFKA_LIB_DIR "/usr/lib/x86_64-linux-gnu")
 	SET(LIBRDKAFKA_LIB_NAME "librdkafka.so")
+	SET(LIBRDKAFKA_CPP_LIB_NAME "librdkafka++.so")
 ENDIF ()
 
 include_directories(${INCLUDE_DIRS})
@@ -80,7 +82,7 @@ IF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU
 
 		main/main_01.cpp
 	)
-	target_link_libraries(${PRODUCER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} librdkafka++.so)
+	target_link_libraries(${PRODUCER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
 
 	#------------------------------------------------------------------------------
 	# add the cpp consumer
@@ -90,7 +92,7 @@ IF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU
 
 		main/main_02.cpp
 	)
-	target_link_libraries(${CONSUMER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} librdkafka++.so)
+	target_link_libraries(${CONSUMER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
 
 ENDIF()
 
