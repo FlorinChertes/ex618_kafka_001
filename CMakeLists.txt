@@ -70,33 +70,30 @@ ENDIF ()
 include_directories(${INCLUDE_DIRS})
 link_directories(${LIBRDKAFKA_LIB_DIR})
 
+#using Clang or GNU
 
-IF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	#usinf Clang or GNU
+#------------------------------------------------------------------------------
+# add the cpp producer
+#------------------------------------------------------------------------------
+SET(PRODUCER_CPP_NAME "kafka_cpp_producer")
+add_executable(${PRODUCER_CPP_NAME}
 
-	#------------------------------------------------------------------------------
-	# add the cpp producer
-	#------------------------------------------------------------------------------
-	SET(PRODUCER_CPP_NAME "kafka_cpp_producer")
-	add_executable(${PRODUCER_CPP_NAME}
+	main/main_01.cpp
+)
+target_link_libraries(${PRODUCER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
 
-		main/main_01.cpp
-	)
-	target_link_libraries(${PRODUCER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
+#------------------------------------------------------------------------------
+# add the cpp consumer
+#------------------------------------------------------------------------------
+SET(CONSUMER_CPP_NAME "kafka_cpp_consumer")
+add_executable(${CONSUMER_CPP_NAME}
 
-	#------------------------------------------------------------------------------
-	# add the cpp consumer
-	#------------------------------------------------------------------------------
-	SET(CONSUMER_CPP_NAME "kafka_cpp_consumer")
-	add_executable(${CONSUMER_CPP_NAME}
+	main/main_02.cpp
+)
+target_link_libraries(${CONSUMER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
 
-		main/main_02.cpp
-	)
-	target_link_libraries(${CONSUMER_CPP_NAME} ${LIBRDKAFKA_LIB_NAME} ${LIBRDKAFKA_CPP_LIB_NAME})
 
-ENDIF()
-
-#usinf Clang or GNU
+#using Clang or GNU
 #using MSVC
 
 #------------------------------------------------------------------------------
@@ -118,7 +115,4 @@ add_executable(${CONSUMER_NAME}
 	main/main_02_01.cpp
 )
 target_link_libraries(${CONSUMER_NAME} ${LIBRDKAFKA_LIB_NAME})
-
-
-
 
