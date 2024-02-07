@@ -20,7 +20,7 @@ int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 #endif
 
 	Application_g application_g{ sender };
-	application_g.Process();
+	application_g.Process(1);
 
 	return 0;
 }

@@ -150,6 +150,9 @@ target_include_directories(${G_SENDER_NAME} PUBLIC ${INCLUDE_DIRS} ${INCLUDE_LOC
 SET(C_RECEIVER_NAME "c_receiver")
 add_executable(${C_RECEIVER_NAME}
 
+	inc/th_s_queue.h
+	inc/background_worker.h
+
 	inc/from_file_reader.h
 	inc/from_kafka_reader.h
 

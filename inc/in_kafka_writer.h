@@ -14,4 +14,9 @@ public:
 	{
 		kafka_producer_send();
 	}
+
+	void send(const std::string& line) const
+	{
+		kafka_producer_send(line);
+	}
 };

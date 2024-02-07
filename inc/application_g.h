@@ -1,5 +1,4 @@
 #pragma once
-//#include "in_file_writer.h"
 
 #include <string>
 #include <iostream>
@@ -22,6 +21,14 @@ public:
     void Process() const
     {
         sender.send();
+    }
+
+    void Process([[maybe_unused]] int i) const
+    {
+        for (std::string line; std::getline(std::cin, line);)
+        {
+            sender.send(line);
+        }
     }
 };
 

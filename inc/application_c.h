@@ -1,5 +1,4 @@
 #pragma once
-//#include "from_file_reader.h"
 
 #include <string>
 #include <iostream>
@@ -23,6 +22,11 @@ public:
     void Process() const
     {
         receiver.receive();
+    }
+
+    void Process(int i) const
+    {
+        receiver.receive(i);
     }
 };
 
