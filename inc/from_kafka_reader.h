@@ -1,6 +1,11 @@
 #pragma once
 
 #include "background_worker.h"
+
+#include "th_s_queue.h"
+#include "kafka_consumer.h"
+
+#include "background_worker.h"
 #include "th_s_queue.h"
 
 #include <thread>
@@ -14,13 +19,13 @@
 class From_kafka_reader
 {
     ThreadSafeQueue<std::string> queue_;
-    BackgroundWorker worker;
+    BackgroundWorker<Kafka_consumer_receive, ThreadSafeQueue<std::string>> worker_;
 
 public:
 
     From_kafka_reader()
         : queue_ {}
-        , worker { queue_}
+        , worker_{ Kafka_consumer_receive {}, queue_ }
     {}
 
     void receive() const

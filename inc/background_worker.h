@@ -1,17 +1,16 @@
-
-#include "kafka_consumer.h"
-
-#include "th_s_queue.h"
+#pragma once
 
 #include <iostream>
 #include <thread>
 #include <chrono>
 
+template <typename CollableT, typename QueueT>
 class BackgroundWorker {
 public:
-    BackgroundWorker(ThreadSafeQueue<std::string>& queue)
-        : stopSignal(false)
-        , queue_(queue)
+    BackgroundWorker(CollableT func, QueueT& queue)
+        : stopSignal{ false }
+        , func_ { func }
+        , queue_{ queue }
     {
         // Start the worker thread in the constructor
         workerThread = std::thread(&BackgroundWorker::workerFunction, this);
@@ -37,13 +36,14 @@ private:
     std::thread workerThread;
     volatile bool stopSignal;
 
-    ThreadSafeQueue<std::string>& queue_;
+    CollableT& func_;
+    QueueT& queue_;
 
     void workerFunction() {
         while (!stopSignal) {
             std::cout << "Working..." << std::endl;
 
-            kafka_consumer_receive(queue_);
+            func_(queue_);
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         std::cout << "Worker thread stopping." << std::endl;
