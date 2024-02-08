@@ -1,8 +1,5 @@
 #pragma once
 
-#include "background_worker.h"
-
-#include "th_s_queue.h"
 #include "kafka_consumer.h"
 
 #include "background_worker.h"
