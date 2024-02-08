@@ -14,7 +14,7 @@
 #include <iostream>
 #include <cassert>
 
-[[noreturn]]  void kafka_consumer_receive()
+void kafka_consumer_receive()
 {
 
     const char* version = rd_kafka_version_str();
@@ -135,7 +135,7 @@
 
 }
 
-[[noreturn]] void kafka_consumer_receive(ThreadSafeQueue<std::string>& queue)
+void kafka_consumer_receive(ThreadSafeQueue<std::string>& queue)
 {
     std::string brokers{ "localhost:9092" };
     const std::string topicName{ "amazingTopic" };
