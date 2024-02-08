@@ -1,19 +1,19 @@
 #pragma once
 
+#include "collable_class.h"
+
 #include <iostream>
 #include <thread>
 #include <chrono>
 
-template <typename CollableT, typename QueueT>
+template <CollableType T>
 class BackgroundWorker {
 public:
-    BackgroundWorker(CollableT func, QueueT& queue)
-        : stopSignal{ false }
-        , func_ { func }
-        , queue_{ queue }
+    explicit BackgroundWorker(T& callable)
+        : callable_{ callable }
     {
         // Start the worker thread in the constructor
-        workerThread = std::thread(&BackgroundWorker::workerFunction, this);
+        workerThread = std::jthread(&BackgroundWorker::workerFunction, this);
     }
 
     ~BackgroundWorker() {
@@ -33,17 +33,16 @@ public:
     // Optionally, define move constructor and assignment operator if needed
 
 private:
-    std::thread workerThread;
-    volatile bool stopSignal;
+    std::jthread workerThread;
+    std::atomic_bool stopSignal {false};
 
-    CollableT& func_;
-    QueueT& queue_;
+    T& callable_;
 
     void workerFunction() {
         while (!stopSignal) {
             std::cout << "Working..." << std::endl;
 
-            func_(queue_);
+            callable_.invoke();
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         std::cout << "Worker thread stopping." << std::endl;

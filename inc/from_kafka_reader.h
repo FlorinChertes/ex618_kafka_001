@@ -16,13 +16,23 @@
 class From_kafka_reader
 {
     ThreadSafeQueue<std::string> queue_;
-    BackgroundWorker<Kafka_consumer_receive, ThreadSafeQueue<std::string>> worker_;
+
+    CollableClass<
+          Kafka_consumer_receive
+        , ThreadSafeQueue<std::string>> callable_;
+
+    BackgroundWorker<
+        CollableClass<
+          Kafka_consumer_receive
+        , ThreadSafeQueue<std::string>>
+        > worker_;
 
 public:
 
     From_kafka_reader()
         : queue_ {}
-        , worker_{ Kafka_consumer_receive {}, queue_ }
+        , callable_{ Kafka_consumer_receive{}, queue_ }
+        , worker_{ callable_ }
     {}
 
     void receive() const
@@ -30,7 +40,7 @@ public:
         kafka_consumer_receive();
     }
 
-    void receive([[maybe_unused]] int i)
+    [[noreturn]] void receive([[maybe_unused]] int i)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         std::cout << "start receive" << std::endl;

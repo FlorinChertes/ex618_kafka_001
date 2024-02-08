@@ -10,7 +10,7 @@ void kafka_consumer_receive(ThreadSafeQueue<std::string>& queue);
 
 struct Kafka_consumer_receive
 {
-	void operator()(ThreadSafeQueue<std::string>& queue)
+	void operator()(ThreadSafeQueue<std::string>& queue) const
 	{
 		kafka_consumer_receive(queue);
 	}

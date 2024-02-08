@@ -152,6 +152,7 @@ add_executable(${C_RECEIVER_NAME}
 
 	inc/th_s_queue.h
 	inc/background_worker.h
+	inc/collable_class.h
 
 	inc/from_file_reader.h
 	inc/from_kafka_reader.h
