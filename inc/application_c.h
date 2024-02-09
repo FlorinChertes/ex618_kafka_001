@@ -12,21 +12,27 @@ concept BasicReceiver = requires(T br) {
 template <BasicReceiver Receiver>
 class Application_c
 {
-    Receiver& receiver;
+    Receiver& receiver_;
 public:
-    explicit Application_c(Receiver& receiver_)
-        : receiver{ receiver_ }
+    explicit Application_c(Receiver& receiver)
+        : receiver_{ receiver }
     {
     }
 
     void Process() const
     {
-        receiver.receive();
+        receiver_.receive();
     }
 
     void Process(int i) const
     {
-        receiver.receive(i);
+        std::cout << "start receive" << std::endl;
+        while (true)
+        {
+            auto&& line{ receiver_.receive(i) };
+            std::cout << "Consuming: " << line << std::endl;
+        }
+        receiver_.receive(i);
     }
 };
 

@@ -2,19 +2,17 @@
 
 #include "collable_class.h"
 
-#include <iostream>
 #include <thread>
-#include <chrono>
 
 template <typename T>
 concept CollableType = requires(T collable) {
     collable.invoke();
 };
 
-template <CollableType T>
+template <CollableType Collable>
 class BackgroundWorker {
 public:
-    explicit BackgroundWorker(T& callable)
+    explicit BackgroundWorker(Collable& callable)
         : callable_{ callable }
         , worker_thread_ { std::jthread(&BackgroundWorker::workerFunction, this) } {
     }
@@ -23,7 +21,7 @@ public:
     BackgroundWorker& operator=(const BackgroundWorker&) = delete;
 
 private:
-    T& callable_;
+    Collable& callable_;
     std::jthread worker_thread_;
 
     void workerFunction() {

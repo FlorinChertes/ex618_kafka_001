@@ -6,12 +6,7 @@
 
 #include "kafka_producer.h"
 
-#include <vector>
 #include <string>
-
-#include <thread>
-#include <chrono>
-
 #include <iostream>
 #include <cassert>
 

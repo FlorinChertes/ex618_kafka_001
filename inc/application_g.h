@@ -12,22 +12,22 @@ concept BasicSender = requires(T bs) {
 template <BasicSender Sender>
 class Application_g
 {
-    Sender& sender;
+    Sender& sender_;
 public:
-    explicit Application_g(Sender& sender_)
-        : sender{ sender_ }
+    explicit Application_g(Sender& sender)
+        : sender_{ sender }
     {
     }
     void Process() const
     {
-        sender.send();
+        sender_.send();
     }
 
     void Process([[maybe_unused]] int i) const
     {
         for (std::string line; std::getline(std::cin, line);)
         {
-            sender.send(line);
+            sender_.send(line);
         }
     }
 };
