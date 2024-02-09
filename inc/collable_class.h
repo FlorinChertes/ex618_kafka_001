@@ -1,11 +1,5 @@
 #pragma once
 
-template <typename T>
-concept CollableType = requires(T collable) {
-    collable.invoke();
-};
-
-// Define a template class with a function object F and variadic types Args
 template<typename F, typename... Args>
 class CollableClass
 {

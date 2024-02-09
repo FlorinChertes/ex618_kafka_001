@@ -6,22 +6,25 @@
 #include <thread>
 #include <chrono>
 
+template <typename T>
+concept CollableType = requires(T collable) {
+    collable.invoke();
+};
+
 template <CollableType T>
 class BackgroundWorker {
 public:
     explicit BackgroundWorker(T& callable)
         : callable_{ callable }
-    {
-        // Start the worker thread in the constructor
-        workerThread = std::jthread(&BackgroundWorker::workerFunction, this);
+        , worker_thread_ { std::jthread(&BackgroundWorker::workerFunction, this) } {
     }
 
     BackgroundWorker(const BackgroundWorker&) = delete;
     BackgroundWorker& operator=(const BackgroundWorker&) = delete;
 
 private:
-    std::jthread workerThread;
     T& callable_;
+    std::jthread worker_thread_;
 
     void workerFunction() {
         std::cout << "Working..." << std::endl;
