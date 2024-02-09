@@ -2,6 +2,7 @@
 
 #include "collable_class.h"
 
+#include <iostream>
 #include <thread>
 
 template <typename T>

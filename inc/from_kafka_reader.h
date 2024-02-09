@@ -20,20 +20,8 @@ class From_kafka_reader
         > worker_;
 
 public:
+    From_kafka_reader();
 
-    From_kafka_reader()
-        : queue_ {}
-        , callable_{ Kafka_consumer_receive{}, queue_ }
-        , worker_{ callable_ }
-    {}
-
-    void receive() const
-    {
-        kafka_consumer_receive();
-    }
-
-    std::string receive([[maybe_unused]] int i)
-    {
-        return queue_.pop();
-    }
+    void receive() const;
+    std::string receive([[maybe_unused]] int i);
 };

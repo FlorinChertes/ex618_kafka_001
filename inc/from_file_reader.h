@@ -1,7 +1,5 @@
 #pragma once
 
-#include "kafka_consumer.h"
-
 #include <thread>
 #include <chrono>
 

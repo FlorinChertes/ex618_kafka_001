@@ -132,7 +132,9 @@ SET(G_SENDER_NAME "g_sender")
 add_executable(${G_SENDER_NAME}
 
 	inc/in_file_writer.h
+
 	inc/in_kafka_writer.h
+	src/in_kafka_writer.cpp
 
 	inc/kafka_producer.h
 	src/kafka_producer.cpp
@@ -155,7 +157,9 @@ add_executable(${C_RECEIVER_NAME}
 	inc/collable_class.h
 
 	inc/from_file_reader.h
+
 	inc/from_kafka_reader.h
+	src/from_kafka_reader.cpp
 
 	inc/kafka_consumer.h
 	src/kafka_consumer.cpp

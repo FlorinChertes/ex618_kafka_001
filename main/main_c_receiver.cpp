@@ -1,13 +1,12 @@
 #include "application_c.h"
 
-#include "from_file_reader.h"
-#include "from_kafka_reader.h"
-
-#include <string>
-#include <iostream>
-#include <cassert>
-
 #define KAFKA
+
+#ifdef KAFKA
+#include "from_kafka_reader.h"
+#else
+#include "from_file_reader.h"
+#endif
 
 int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {

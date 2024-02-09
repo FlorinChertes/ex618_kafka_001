@@ -1,13 +1,12 @@
 #include "application_g.h"
 
-#include "in_file_writer.h"
-#include "in_kafka_writer.h"
-
-#include <string>
-#include <iostream>
-#include <cassert>
-
 #define KAFKA
+
+#ifdef KAFKA
+#include "in_kafka_writer.h"
+#else
+#include "in_file_writer.h"
+#endif
 
 int main ([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
